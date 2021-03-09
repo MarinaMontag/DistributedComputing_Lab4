@@ -1,6 +1,8 @@
 package model;
 
-public class Data {
+import java.io.Serializable;
+
+public class Data implements Serializable {
     private String FIO;
     private String mobile;
 
@@ -26,5 +28,13 @@ public class Data {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    @Override
+    public String toString() {
+        return "Data{" +
+                "FIO='" + FIO + '\'' +
+                ", mobile='" + mobile + '\'' +
+                '}';
     }
 }
