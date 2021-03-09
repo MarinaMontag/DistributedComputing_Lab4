@@ -1,5 +1,6 @@
 package app;
 
+import RWthreads.SearchByNames;
 import model.Data;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class App {
         addNumbers();
         writeObjectsToFile();
         readObjectsFromFile();
+        new SearchByNames(names);
     }
 
     public static void main(String[] args) {
@@ -62,12 +64,15 @@ public class App {
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            while (true) {
+           for(int i=0;i<SIZE;i++){
                 System.out.println((Data) ois.readObject());
             }
-        } catch (EOFException ignored) {
+           ois.close();
+           fis.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        System.out.println();
+        System.out.println();
     }
 }
