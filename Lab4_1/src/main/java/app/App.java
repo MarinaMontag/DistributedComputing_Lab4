@@ -1,6 +1,7 @@
 package app;
 
 import RWthreads.SearchByNames;
+import RWthreads.SearchByNumbers;
 import model.Data;
 
 import java.io.*;
@@ -20,6 +21,7 @@ public class App {
         writeObjectsToFile();
         readObjectsFromFile();
         new SearchByNames(names);
+        new SearchByNumbers(numbers);
     }
 
     public static void main(String[] args) {
