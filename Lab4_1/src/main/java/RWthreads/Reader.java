@@ -6,13 +6,16 @@ import java.io.*;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 abstract public class Reader implements Runnable{
-    private final Queue<String> queue= new ArrayDeque<>();
-    public Reader(List<String> queue) {
+    private AtomicBoolean writing;
+    private Queue<String> queue= new ArrayDeque<>();
+    public Reader(List<String> list, AtomicBoolean writing) {
+        this.writing=writing;
+        this.queue.addAll(list);
         int numOfThreads = 3;
         Thread[] threads = new Thread[numOfThreads];
-        this.queue.addAll(queue);
         for(int i = 0; i< numOfThreads; i++){
             threads[i]=new Thread(this);
             threads[i].start();
@@ -21,15 +24,23 @@ abstract public class Reader implements Runnable{
     public void run() {
         String info;
         while (true){
-            synchronized (queue){
-                if(queue.isEmpty())
-                    break;
-                info=queue.poll();
-            }
-            Data data=searchInFile(info);
-            printResult(data,info);
+            synchronized (writing) {
+                if(writing.get()) {
+                    try {
+                        writing.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                   if (queue.isEmpty())
+                       break;
+                   info = queue.poll();
+               }
+               Data data = searchInFile(info);
+               printResult(data, info);
+           }
         }
-    }
 
     private Data searchInFile(String info){
         FileInputStream fis=null;

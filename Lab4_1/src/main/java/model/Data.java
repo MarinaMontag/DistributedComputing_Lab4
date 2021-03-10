@@ -3,11 +3,8 @@ package model;
 import java.io.Serializable;
 
 public class Data implements Serializable {
-    private String FIO;
-    private String mobile;
-
-    public Data() {
-    }
+    private final String FIO;
+    private final String mobile;
 
     public Data(String FIO, String mobile) {
         this.FIO = FIO;
@@ -18,16 +15,8 @@ public class Data implements Serializable {
         return FIO;
     }
 
-    public void setFIO(String FIO) {
-        this.FIO = FIO;
-    }
-
     public String getMobile() {
         return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     @Override

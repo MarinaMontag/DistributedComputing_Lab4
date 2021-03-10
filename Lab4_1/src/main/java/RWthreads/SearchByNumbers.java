@@ -1,15 +1,12 @@
 package RWthreads;
 
 import model.Data;
-
-import java.io.*;
-import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SearchByNumbers extends Reader{
-    public SearchByNumbers(List<String> numbers){
-        super(numbers);
+    public SearchByNumbers(List<String> numbers, AtomicBoolean writing){
+        super(numbers,writing);
     }
 
 

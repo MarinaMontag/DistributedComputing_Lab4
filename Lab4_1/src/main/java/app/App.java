@@ -1,27 +1,34 @@
 package app;
 
+import RWthreads.DeleteRecords;
 import RWthreads.SearchByNames;
 import RWthreads.SearchByNumbers;
 import model.Data;
 
 import java.io.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class App {
-    private final int SIZE = 7;
+    private static AtomicInteger SIZE = new AtomicInteger(7);
     private final List<String> names = new ArrayList<>();
     private final List<String> numbers = new ArrayList<>();
-    private final List<Data> dataToWrite = new ArrayList<>();
-    private final File file = new File("data.dat");
-
+    private final Queue<Data> dataToWrite = new ArrayDeque<>();
+    private static final File file = new File("data.dat");
+    private AtomicBoolean writing=new AtomicBoolean(false);
     App() {
         addNames();
         addNumbers();
         writeObjectsToFile();
         readObjectsFromFile();
-        new SearchByNames(names);
-        new SearchByNumbers(numbers);
+        addDataToWrite();
+        SearchByNames readerNames=new SearchByNames(names,writing);
+        SearchByNumbers readerNumbers=new SearchByNumbers(numbers,writing);
+        DeleteRecords deleteRecords=new DeleteRecords(writing,SIZE);
     }
 
     public static void main(String[] args) {
@@ -52,7 +59,7 @@ public class App {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            for (int i = 0; i < SIZE; i++) {
+            for (int i = 0; i < SIZE.get(); i++) {
                 oos.writeObject(new Data(names.get(i), numbers.get(i)));
             }
             oos.close();
@@ -62,11 +69,11 @@ public class App {
         }
     }
 
-    private void readObjectsFromFile() {
+    public static void readObjectsFromFile() {
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-           for(int i=0;i<SIZE;i++){
+           for(int i=0;i<SIZE.get();i++){
                 System.out.println((Data) ois.readObject());
             }
            ois.close();
@@ -76,5 +83,13 @@ public class App {
         }
         System.out.println();
         System.out.println();
+    }
+
+    private void addDataToWrite(){
+        dataToWrite.add(new Data("Katya","8888888"));
+        dataToWrite.add(new Data("Yura","9999999"));
+        dataToWrite.add(new Data("Alex","10000000"));
+        dataToWrite.add(new Data("Maxim","1100000"));
+        dataToWrite.add(new Data("Vitaliy","1200000"));
     }
 }

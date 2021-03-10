@@ -2,11 +2,12 @@ package RWthreads;
 
 import model.Data;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SearchByNames extends Reader{
 
-    public SearchByNames(List<String> names){
-        super(names);
+    public SearchByNames(List<String> names, AtomicBoolean writing){
+        super(names,writing);
     }
 
 
