@@ -1,5 +1,6 @@
 package app;
 
+import RWthreads.AddRecords;
 import RWthreads.DeleteRecords;
 import RWthreads.SearchByNames;
 import RWthreads.SearchByNumbers;
@@ -21,18 +22,27 @@ public class App {
     private static final File file = new File("data.dat");
     private AtomicBoolean writing=new AtomicBoolean(false);
     App() {
-        addNames();
-        addNumbers();
-        writeObjectsToFile();
-        readObjectsFromFile();
-        addDataToWrite();
-        SearchByNames readerNames=new SearchByNames(names,writing);
-        SearchByNumbers readerNumbers=new SearchByNumbers(numbers,writing);
-        DeleteRecords deleteRecords=new DeleteRecords(writing,SIZE);
+        if(prepareProgram()) {
+            addNames();
+            addNumbers();
+            writeObjectsToFile();
+            readObjectsFromFile();
+            addDataToWrite();
+            SearchByNames readerNames = new SearchByNames(names, writing);
+            SearchByNumbers readerNumbers = new SearchByNumbers(numbers, writing);
+            DeleteRecords deleteRecords = new DeleteRecords(writing, SIZE);
+            AddRecords addRecords = new AddRecords(readerNames, readerNumbers, writing, SIZE, dataToWrite);
+        }
     }
 
     public static void main(String[] args) {
         new App();
+    }
+
+    private boolean prepareProgram(){
+        if(file.exists())
+            return file.delete();
+        return true;
     }
 
     private void addNames() {

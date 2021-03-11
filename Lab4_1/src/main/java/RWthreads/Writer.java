@@ -12,7 +12,7 @@ abstract public class Writer implements Runnable{
     public Writer(AtomicBoolean writing, AtomicInteger SIZE) {
         this.writing = writing;
         this.SIZE=SIZE;
-        int numOfThreads = 6;
+        int numOfThreads = 5;
         Thread[] threads = new Thread[numOfThreads];
         for(int i = 0; i< numOfThreads; i++){
             threads[i]=new Thread(this);

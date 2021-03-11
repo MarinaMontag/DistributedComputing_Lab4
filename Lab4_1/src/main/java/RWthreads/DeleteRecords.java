@@ -38,13 +38,14 @@ public class DeleteRecords extends Writer{
                             Object obj = ois.readObject();
                             if (i != toDelete)
                                 oos.writeObject((Data) obj);
+                            else
+                                System.out.println("record "+(Data)obj+" was deleted");
                         }
                         oos.close();
                         ois.close();
                         fos.close();
                         fis.close();
                         if(oldFile.delete()){
-                            System.out.println("record deleted");
                             newFile.renameTo(new File("data.dat"));
                         }
                         SIZE.decrementAndGet();

@@ -39,7 +39,12 @@ abstract public class Reader implements Runnable{
                }
                Data data = searchInFile(info);
                printResult(data, info);
-           }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         }
 
     private Data searchInFile(String info){
@@ -74,7 +79,12 @@ abstract public class Reader implements Runnable{
         return null;
     }
 
+    protected void addElement(String info){
+        queue.add(info);
+    }
+
     protected abstract void printResult(Data data,String info);
     protected abstract boolean neededResult(Data data,String info);
     protected abstract void printEOFException(String info);
+
 }
